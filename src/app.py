@@ -1,16 +1,16 @@
 import streamlit as st
-from newsletter_gen.crew import NewsletterGenCrew
+from ai_gen.crew import NewsletterGenCrew
 
 
-class NewsletterGenUI:
+class SmartGen:
 
     def load_html_template(self):
-        with open("src/newsletter_gen/config/newsletter_template.html", "r") as file:
+        with open("src/ai_gen/config/ai_template.html", "r") as file:
             html_template = file.read()
 
         return html_template
 
-    def generate_newsletter(self, topic, personal_message):
+    def generate_report(self, topic, personal_message):
         inputs = {
             "topic": topic,
             "personal_message": personal_message,
@@ -18,48 +18,48 @@ class NewsletterGenUI:
         }
         return NewsletterGenCrew().crew().kickoff(inputs=inputs)
 
-    def newsletter_generation(self):
+    def report_generation(self):
 
         if st.session_state.generating:
-            st.session_state.newsletter = self.generate_newsletter(
+            st.session_state.report = self.generate_report(
                 st.session_state.topic, st.session_state.personal_message
             )
 
-        if st.session_state.newsletter and st.session_state.newsletter != "":
+        if st.session_state.report and st.session_state.report != "":
             with st.container():
-                st.write("Newsletter generated successfully!")
+                st.write("Report generated successfully!")
                 st.download_button(
                     label="Download HTML file",
-                    data=st.session_state.newsletter,
-                    file_name="newsletter.html",
+                    data=st.session_state.report,
+                    file_name="report.html",
                     mime="text/html",
                 )
             st.session_state.generating = False
 
     def sidebar(self):
         with st.sidebar:
-            st.title("Newsletter Generator")
+            st.title("AI Market Researcher")
 
             st.write(
                 """
-                To generate a newsletter, enter a topic and a personal message. \n
-                Your team of AI agents will generate a newsletter for you!
+                To generate a reaserch report, enter a topic and a text description. \n
+                Your team of AI agents will generate a report for you!
                 """
             )
 
             st.text_input("Topic", key="topic", placeholder="USA Stock Market")
 
             st.text_area(
-                "Your personal message (to include at the top of the newsletter)",
+                "Your text description (to include at the top of the report)",
                 key="personal_message",
-                placeholder="Dear readers, welcome to the newsletter!",
+              
             )
 
-            if st.button("Generate Newsletter"):
+            if st.button("Generate Report"):
                 st.session_state.generating = True
 
     def render(self):
-        st.set_page_config(page_title="Newsletter Generation", page_icon="📧")
+        st.set_page_config(page_title="AI Market Researcher", page_icon="🔍")
 
         if "topic" not in st.session_state:
             st.session_state.topic = ""
@@ -67,16 +67,16 @@ class NewsletterGenUI:
         if "personal_message" not in st.session_state:
             st.session_state.personal_message = ""
 
-        if "newsletter" not in st.session_state:
-            st.session_state.newsletter = ""
+        if "report" not in st.session_state:
+            st.session_state.report = ""
 
         if "generating" not in st.session_state:
             st.session_state.generating = False
 
         self.sidebar()
 
-        self.newsletter_generation()
+        self.report_generation()
 
 
-if __name__ == "__main__":
-    NewsletterGenUI().render()
+
+SmartGen().render()

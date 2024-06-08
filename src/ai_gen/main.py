@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from newsletter_gen.crew import NewsletterGenCrew
+from ai_gen.crew import NewsletterGenCrew
 
 def load_html_template(): 
     with open('src/newsletter_gen/config/newsletter_template.html', 'r') as file:

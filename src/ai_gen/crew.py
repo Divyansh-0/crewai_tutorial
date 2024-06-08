@@ -1,8 +1,8 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from newsletter_gen.tools.research import SearchAndContents, FindSimilar, GetContents
+from ai_gen.tools.research import SearchAndContents, FindSimilar, GetContents
 from langchain_anthropic import ChatAnthropic
-from langchain_groq import ChatGroq
+# from langchain_groq import ChatGroq
 from datetime import datetime
 import streamlit as st
 from typing import Union, List, Tuple, Dict
@@ -10,7 +10,15 @@ from langchain_core.agents import AgentFinish
 import json
 from langchain_google_genai import ChatGoogleGenerativeAI
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+
+if "GOOGLE_API_KEY" not in os.environ:
+    os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
+
+os.environ["ANTHROPIC_API_KEY"] = os.getenv("ANTHROPIC_API_KEY")
 
 @CrewBase
 class NewsletterGenCrew:
@@ -20,10 +28,10 @@ class NewsletterGenCrew:
     tasks_config = "config/tasks.yaml"
 
     def llm(self):
-        llm = ChatAnthropic(model_name="claude-3-sonnet-20240229", max_tokens=4096)
+        llm = ChatAnthropic(model_name="claude-3-sonnet-20240229", max_tokens=2048)
         # llm = ChatGroq(model="llama3-70b-8192")
         # llm = ChatGroq(model="mixtral-8x7b-32768")
-        # llm = ChatGoogleGenerativeAI(google_api_key=os.getenv("GOOGLE_API_KEY"))
+        # llm = ChatGoogleGenerativeAI( model="gemini-pro")
 
         return llm
 
